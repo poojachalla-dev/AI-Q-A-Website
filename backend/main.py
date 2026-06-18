@@ -1,13 +1,11 @@
 from fastapi import FastAPI
+from database import Base, engine, SessionLocal
+from models import Category, Question
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-@app.get("/")
-def home():
-    return {"message": "AI Interview API Running"}
-
-
+# CORS (IMPORTANT for frontend)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -16,18 +14,69 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+Base.metadata.create_all(bind=engine)
+
+
+# ---------------- SEED DATA ----------------
+def seed_data():
+    db = SessionLocal()
+
+    if db.query(Category).count() == 0:
+        db.add_all([
+            Category(name="Python"),
+            Category(name="Machine Learning"),
+            Category(name="Deep Learning"),
+            Category(name="NLP"),
+        ])
+
+    if db.query(Question).count() == 0:
+        db.add_all([
+            Question(
+                category="Machine Learning",
+                question="What is overfitting?",
+                answer="Model learns noise instead of patterns."
+            ),
+            Question(
+                category="Machine Learning",
+                question="What is bias-variance tradeoff?",
+                answer="Balance between model complexity and generalization."
+            ),
+            Question(
+                category="Python",
+                question="What is a decorator?",
+                answer="A function that modifies another function."
+            )
+        ])
+
+    db.commit()
+    db.close()
+
+
+@app.on_event("startup")
+def startup():
+    seed_data()
+
+
+# ---------------- API ----------------
+
 @app.get("/categories")
 def get_categories():
+    db = SessionLocal()
+    cats = db.query(Category).all()
+    db.close()
+    return [c.name for c in cats]
+
+
+@app.get("/questions")
+def get_questions(category: str):
+    db = SessionLocal()
+    qs = db.query(Question).filter(Question.category == category).all()
+    db.close()
+
     return [
-        "Python",
-        "SQL",
-        "Statistics",
-        "NumPy",
-        "Pandas",
-        "Machine Learning",
-        "Deep Learning",
-        "NLP",
-        "Computer Vision",
-        "ML Ops",
-        "System Design"   
+        {
+            "question": q.question,
+            "answer": q.answer
+        }
+        for q in qs
     ]

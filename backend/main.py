@@ -87,3 +87,21 @@ def get_questions(category: str):
         }
         for q in qs
     ]
+
+@app.get("/search")
+def search_questions(q: str):
+    db = SessionLocal()
+
+    results = db.query(Question).filter(
+        Question.question.contains(q)
+    ).all()
+
+    db.close()
+
+    return [
+        {
+            "question": r.question,
+            "answer": r.answer
+        }
+        for r in results
+    ]

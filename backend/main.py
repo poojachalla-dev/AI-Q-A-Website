@@ -24,9 +24,16 @@ def seed_data():
     if db.query(Category).count() == 0:
         db.add_all([
             Category(name="Python"),
+            Category(name="SQL"),
+            Category(name="Statistics"),
+            Category(name="NumPy"),
+            Category(name="Pandas"),
             Category(name="Machine Learning"),
             Category(name="Deep Learning"),
             Category(name="NLP"),
+            Category(name="Computer Vision"),
+            Category(name="ML Ops"),
+            Category(name="System_Design")
         ])
 
     if db.query(Question).count() == 0:

@@ -1,0 +1,149 @@
+/* Font families are loaded via next/font/google in layout.tsx, which sets
+   --font-display, --font-body, --font-mono as CSS variables on <body>. */
+
+:root {
+  --void: #060611;
+  --void-soft: #0c0d1f;
+  --void-card: #0e0f24;
+  --mist: #c7c9e0;
+  --mist-dim: #82839e;
+  --glow: #f7f8ff;
+
+  --cyan: #67e8f9;
+  --violet: #c084fc;
+  --coral: #fb923c;
+
+  --line: rgba(199, 201, 224, 0.12);
+  --line-bright: rgba(199, 201, 224, 0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--void);
+  color: var(--glow);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--cyan);
+  color: var(--void);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+  margin: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent, var(--cyan));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent, var(--cyan));
+}
+
+.glass-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card:hover {
+  border-color: var(--accent, var(--cyan));
+  box-shadow: 0 0 0 1px var(--accent, var(--cyan)) inset, 0 8px 32px -12px var(--accent, var(--cyan));
+  transform: translateY(-3px);
+}
+
+.chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--mist);
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.03);
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 14px 26px;
+  border-radius: 999px;
+  border: 1px solid var(--line-bright);
+  background: transparent;
+  color: var(--glow);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--cyan);
+}
+.btn.primary {
+  background: var(--cyan);
+  color: var(--void);
+  border-color: var(--cyan);
+  font-weight: 700;
+}
+.btn.primary:hover {
+  box-shadow: 0 0 26px rgba(103, 232, 249, 0.4);
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001s !important; transition-duration: 0.2s !important; }
+}
+
+@media (max-width: 720px) {
+  .container { padding: 0 18px; }
+}
